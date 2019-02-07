@@ -1,17 +1,21 @@
-const express = require("express");
 const http = require('http');
-const app = express();
+const { Client } = require('pg');
+const app = require('./app.js');
 
 const DBCONNECTION = process.env.DBCONNECTION;
+const client = new Client(DBCONNECTION);
+const CREATENUMBERTABLE = "create table numbers(number varchar(10))";
 
-const form = `<form action="/add" method="POST"><input name="number" placeholder="give number"><button type="submit">submit</button></form>`;
+app.getClient = () => client;
 
-const homePage =(req,res)=> {
-    res.send(form);
-};
-
-app.use(express.urlencoded({ extended: false}));
-
-app.get("/", homePage)
-
-http.createServer(app).listen(9000);
+client.connect()
+    .then(()=>{
+        client.query(CREATENUMBERTABLE).then((resp)=>{
+            console.log("table successfully created!");
+          }).catch((err)=>{
+            console.log("table already exist!");
+          });
+        http.createServer(app).listen(9000);
+        console.log(`listening at ${9000}`);
+    })
+    .catch(err=>console.log(err));
