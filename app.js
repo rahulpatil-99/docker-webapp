@@ -29,4 +29,6 @@ app.get("/", getNumbers)
 
 app.post("/add", insertNumber);
 
+app.listen(9000);
+
 module.exports = app;

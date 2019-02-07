@@ -1,4 +1,3 @@
-const http = require('http');
 const { Client } = require('pg');
 const app = require('./app.js');
 
@@ -15,7 +14,6 @@ client.connect()
           }).catch((err)=>{
             console.log("table already exist!");
           });
-        http.createServer(app).listen(9000);
         console.log(`listening at ${9000}`);
     })
     .catch(err=>console.log(err));
